@@ -5,7 +5,6 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 contract Fundme {
 
    uint256 constant MinimumUSD = 5 * 1e18;
-   uint256 TotalAmount;
    address immutable Owner;
    mapping (address => uint256) public fundAmt;
 
@@ -15,20 +14,19 @@ contract Fundme {
      }
     constructor(){
       Owner = msg.sender;
+        
     }
 
     function Fund() external  payable    {
         require(GetConvertion(msg.value) >= MinimumUSD , "Minimum USD for Fund is 5$");
         fundAmt[msg.sender] = fundAmt[msg.sender] + msg.value;
-        TotalAmount += msg.value;
+        
     }
 
     function WithDraw() external onlyOwner {
       
-        require(TotalAmount > 0, "No amount to withDraw");
-        uint256 _value = TotalAmount;
-        TotalAmount =0 ;
-        (bool sent ,) = Owner.call{value : _value}("");
+        require( address(this).balance > 0, "No amount to withDraw");
+        (bool sent ,) = Owner.call{value : address(this).balance }("");
         require(sent , "Fail To Send");
     }
 
@@ -48,4 +46,7 @@ contract Fundme {
         return Value;
         
     }
+
+
+    
 }
