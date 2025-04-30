@@ -5,7 +5,7 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 contract Fundme {
 
    uint256 constant MinimumUSD = 5 * 1e18;
-   address immutable Owner;
+   address payable  immutable Owner;
    mapping (address => uint256) public fundAmt;
 
    modifier onlyOwner{ 
@@ -13,7 +13,7 @@ contract Fundme {
         _;
      }
     constructor(){
-      Owner = msg.sender;
+      Owner = payable(msg.sender);
         
     }
 
