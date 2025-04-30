@@ -15,15 +15,12 @@ contract Fundme {
      }
     constructor(){
       Owner = msg.sender;
-        
     }
 
     function Fund() external  payable    {
         require(GetConvertion(msg.value) >= MinimumUSD , "Minimum USD for Fund is 5$");
         fundAmt[msg.sender] = fundAmt[msg.sender] + msg.value;
         TotalAmount += msg.value;
-
-        
     }
 
     function WithDraw() external onlyOwner {
@@ -33,9 +30,6 @@ contract Fundme {
         TotalAmount =0 ;
         (bool sent ,) = Owner.call{value : _value}("");
         require(sent , "Fail To Send");
-
-
-        
     }
 
 
@@ -54,7 +48,4 @@ contract Fundme {
         return Value;
         
     }
-
-
-    
 }
