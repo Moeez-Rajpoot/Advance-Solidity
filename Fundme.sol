@@ -5,7 +5,7 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 contract Fundme {
 
    uint256 constant MinimumUSD = 5 * 1e18;
-   address payable  immutable Owner;
+   address payable public   immutable Owner;
    mapping (address => uint256) public fundAmt;
 
    modifier onlyOwner{ 
@@ -17,7 +17,7 @@ contract Fundme {
         
     }
 
-    function Fund() external  payable    {
+    function Fund() public  payable    {
         require(GetConvertion(msg.value) >= MinimumUSD , "Minimum USD for Fund is 5$");
         fundAmt[msg.sender] = fundAmt[msg.sender] + msg.value;
         
@@ -46,6 +46,14 @@ contract Fundme {
         return Value;
         
     }
+
+    receive() external payable { 
+        Fund();
+    }
+
+    fallback() external payable {
+        Fund();
+     }
 
 
     
